@@ -1,6 +1,6 @@
 --Create a grocery store database
 
-create table Products (id integer primary key, category text, item text, quantity integer, "price (£)" integer);
+create table Products (id integer primary key, category text, item text, quantity integer, "price" integer);
 INSERT INTO Products VALUES
 (1, "Food","Apples", 500, "1"),
 (2, "Food","Pears", 150, "1.50"),
@@ -22,7 +22,7 @@ INSERT INTO Products VALUES
 
 --display the database ordered by price. 
 
-Select * from Products ORDER BY "price (£)";
+Select * from Products ORDER BY "price";
 
 --display the database with each category summed for total stock
 
