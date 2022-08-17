@@ -1,6 +1,7 @@
 --Create a grocery store database
 
 create table Products (id integer primary key, category text, item text, quantity integer, "price" integer);
+
 INSERT INTO Products VALUES
 (1, "Food","Apples", 500, "1"),
 (2, "Food","Pears", 150, "1.50"),
