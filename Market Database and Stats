@@ -27,7 +27,9 @@ Select * from Products ORDER BY price;
 
 --display the database with each category summed for total stock
 
-Select distinct category, sum(quantity) from products group by category order by category;
+Select distinct category, sum(quantity) from products 
+group by category 
+order by category;
 
 --what is the average price of each item in the drinks section
 
