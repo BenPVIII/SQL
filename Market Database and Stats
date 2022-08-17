@@ -31,7 +31,7 @@ Select distinct category, sum(quantity) from products group by category order by
 
 --what is the average price of each item in the drinks section
 
-Select avg("price") as "Average Drinks Price"
+Select avg(price) as "Average Drinks Price"
 from products 
 where category="Drinks";
 
