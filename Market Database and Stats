@@ -23,7 +23,7 @@ INSERT INTO Products VALUES
 
 --display the database ordered by price. 
 
-Select * from Products ORDER BY "price";
+Select * from Products ORDER BY price;
 
 --display the database with each category summed for total stock
 
