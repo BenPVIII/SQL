@@ -1,0 +1,128 @@
+/* Marvel Heroes and Villains
+ Based on the website http://marvel.wikia.com/Main_Page
+ with popularity data from http://observationdeck.io9.com/something-i-found-marvel-character-popularity-poll-cb-1568108064 
+ and power grid data from http://marvel.wikia.com/Power_Grid#Power
+ Collected by: https://www.khanacademy.org/profile/Mentrasto/
+ */
+
+CREATE TABLE marvels (ID INTEGER PRIMARY KEY,
+    name TEXT,
+    popularity INTEGER,
+    alignment TEXT,
+    gender TEXT, 
+    height_m NUMERIC,
+    weight_kg NUMERIC,
+    hometown TEXT,
+    intelligence INTEGER,
+    strength INTEGER,
+    speed INTEGER,
+    durability INTEGER,
+    energy_Projection INTEGER,
+    fighting_Skills INTEGER);
+    
+INSERT INTO marvels VALUES(1, "Spider Man", 1, "Good", "Male", 1.78, 75.75, "USA", 4, 4, 3, 3, 1, 4); 
+INSERT INTO marvels VALUES(2, "Iron Man", 20, "Neutral", "Male", 1.98, 102.58, "USA", 6, 6, 5, 6, 6, 4); 
+INSERT INTO marvels VALUES(3, "Hulk", 18, "Neutral", "Male", 2.44, 635.29, "USA", 1, 7, 3, 7, 5, 4); 
+INSERT INTO marvels VALUES(4, "Wolverine", 3, "Good", "Male", 1.6, 88.46, "Canada", 2, 4, 2, 4, 1, 7);
+INSERT INTO marvels VALUES(5, "Thor", 5, "Good", "Male", 1.98, 290.3, "Asgard", 2, 7, 7, 6, 6, 4);
+INSERT INTO marvels VALUES(6, "Green Goblin", 91, "Bad", "Male", 1.93, 174.63, "USA", 4, 4, 3, 4, 3, 3);
+INSERT INTO marvels VALUES(7, "Magneto", 11, "Neutral", "Male", 1.88, 86.18, "Germany", 6, 3, 5, 4, 6, 4);
+INSERT INTO marvels VALUES(8, "Thanos", 47, "Bad", "Male", 2.01, 446.79, "Titan", 6, 7, 7, 6, 6, 4);
+INSERT INTO marvels VALUES(9, "Loki", 32, "Bad", "Male", 1.93, 238.14, "Jotunheim", 5, 5, 7, 6, 6, 3);
+INSERT INTO marvels VALUES(10, "Doctor Doom", 19, "Bad", "Male", 2.01, 188.24, "Latveria", 6, 4, 5, 6, 6, 4);
+INSERT INTO marvels VALUES(11, "Jean Grey", 8, "Good", "Female", 1.68, 52.16, "USA", 3, 2, 7, 7, 7, 4);
+INSERT INTO marvels VALUES(12, "Rogue", 4, "Good", "Female", 1.73, 54.43, "USA", 7, 7, 7, 7, 7, 7);
+INSERT INTO marvels VALUES(13, "Storm", 2, "Good", "Female", 1.80, 66, "Kenya", 2, 2, 3, 2, 5, 4);
+INSERT INTO marvels VALUES(14, "Nightcrawler", 6, "Good", "Male", 1.75, 73, "Germany", 3, 2, 7, 2, 1, 3);
+INSERT INTO marvels VALUES(15, "Gambit", 7, "Good", "Male", 1.88, 81, "EUA", 2, 2, 2, 2, 2, 4);
+INSERT INTO marvels VALUES(16, "Captain America", 9, "Good", "Male", 1.88, 108, "EUA", 3, 3, 2, 3, 1, 6);
+INSERT INTO marvels VALUES(17, "Cyclops", 10, "Good", "Male", 1.90, 88, "EUA", 3, 2, 2, 2, 5, 4);
+INSERT INTO marvels VALUES(18, "Emma Frost", 12, "Neutral", "Female", 1.78, 65, "EUA", 4, 4, 2, 5, 5, 3);
+INSERT INTO marvels VALUES(19, "Kitty Pryde", 13, "Good", "Female", 1.68, 50, "EUA", 4, 2, 2, 3, 1, 5);
+INSERT INTO marvels VALUES(20, "Daredevil", 14, "Good", "Male", 1.83, 91, "EUA", 3, 3, 2, 2, 4, 5);
+INSERT INTO marvels VALUES(21, "Punisher", 50, "Neutral", "Male", 1.85, 91, "EUA", 3, 3, 2, 2, 1, 6);
+INSERT INTO marvels VALUES(22, "Silver Surfer", 33, "Good", "Male", 1.93, 102, "Zenn-La", 3, 7, 7, 6, 7, 2);
+INSERT INTO marvels VALUES(23, "Ghost Rider", 86, "Good", "Male", 1.88, 99, "EUA", 2, 4, 3, 5, 4, 2);
+INSERT INTO marvels VALUES(24, "Venon", 78, "Neutral", "Male", 1.90, 118, "EUA", 3, 4, 2, 6, 1, 4);
+INSERT INTO marvels VALUES(25, "Juggernaut", 76, "Neutral", "Male", 2.87, 862, "EUA", 2, 7, 2, 7, 1, 4);
+INSERT INTO marvels VALUES(26, "Professor X", 58, "Good", "Male", 1.83, 86, "EUA", 5, 2, 2, 2, 5, 3);
+
+/* What is the average intelligence of Marvel Characters depending on their alignment? */
+
+SELECT ROUND(AVG(intelligence) , 2) as avg_intelligence, alignment FROM marvels
+GROUP BY alignment;
+
+-- Here we can notice that, at least in the marvel universe, Bad aligned characters are more intelligent, and infact, good characters average as the least intelligent. --
+
+/* Who is the most intelligent character from each alignment? */
+
+SELECT name, MAX(intelligence) as Highest_intelligence, alignment FROM marvels
+GROUP BY alignment;
+
+/* Who is the least intelligent character from each alignment? */
+
+SELECT name, MIN(intelligence) as Lowest_intelligence, alignment FROM marvels
+GROUP BY alignment;
+
+/* And the most intelligent character overall? */
+
+SELECT name, MAX(intelligence) as Highest_intelligence, alignment FROM marvels;
+
+/* And the least intelligent character overall? */
+
+SELECT name, MIN(intelligence) as Highest_intelligence, alignment FROM marvels;
+
+-- Despite the average showing Bad aligned characters as being the most intelligent on average, we can see that infact, Rogue who is of good alignment, is the smartest character in the Marvel universe, suggesting that perhaps, Good/neutral characters have a larger distribution of intelligence generally, or a more concentrated distribution at the lower end than evil who may be more concentrated at the higher end. Lets investigate this between Good and Evil. First, I will find the average intelligence across all characters to inform how I will label each intelligence rating.
+
+SELECT ROUND(AVG(intelligence), 1) as avg_intelligence from marvels;
+
+-- From this, we can see that 3.6 is the average. 3.6-5 will be Intelligent, 5+ Very Intelligent. Conversely, 2-3.6 will be Low Intelligence, 0-2 Very Low Intelligence. Lets put this into a CASE so we can see the count of each intelligence rating. Lets start with seeing the distribution of Good character intelligence.
+
+SELECT COUNT(*) as Quantity,
+        CASE 
+        WHEN intelligence >5 AND alignment="Good" THEN "1 Very Intelligent"
+        WHEN intelligence >3.6 AND alignment="Good" THEN "2 Intelligent"
+        WHEN intelligence >2 AND alignment="Good" THEN "3 Low Intelligence"
+        WHEN intelligence >=0 AND alignment="Good" then "4 Very Low Intelligence"
+END as "Intelligence_Rating_Good"
+FROM marvels
+WHERE intelligence_rating_good IS NOT NULL
+GROUP BY intelligence_rating_Good;
+
+-- Now lets do the same but with Evil characters instead.
+
+SELECT COUNT(*) as Quantity,
+        CASE 
+        WHEN intelligence >5 AND alignment="Bad" THEN "1 Very Intelligent"
+        WHEN intelligence >3.6 AND alignment="Bad" THEN "2 Intelligent"
+        WHEN intelligence >2 AND alignment="Bad" THEN "3 Low Intelligence"
+        WHEN intelligence >=0 AND alignment="Bad" then "4 Very Low Intelligence"
+END as "Intelligence_Rating_Bad"
+FROM marvels
+WHERE intelligence_rating_Bad IS NOT NULL
+GROUP BY intelligence_rating_Bad;
+
+-- Which Good and Bad characters are above average (3.6) intelligence overall? 
+
+SELECT name, alignment from marvels
+GROUP BY name
+HAVING intelligence >3.6 AND (alignment = "Good" or alignment = "Bad")
+ORDER BY alignment;
+
+-- In this database, how many characters are good, and how many are bad? 
+
+SELECT COUNT(*) as "Total_Bad_Characters"
+FROM marvels
+WHERE alignment="Bad";
+
+SELECT COUNT(*) as "Total_Good_Characters"
+FROM marvels
+WHERE alignment="Good";
+
+
+-- When comparing the two results, we can clearly see that, at least with the database that we are working with, there are more Good characters leaning to the lower intelligence range, than the Bad characters, explaining the higher average intelligence of Bad characters. Though as a limitation of this data, we can see we only have 4 examples of Bad characters, compared to 15 examples of Good characters, which could skew the data.
+
+-- During this investigation, I have used CASE, "IS NOT NULL", COUNT, ROUND, AND/OR functions and aggregate functions to visualize the intelligence of Marvel characters. Using CASE combined with AND/OR to sort the characters into intelligence ratings, using "IS NOT NULL" to exclude the Bad characters from the Good characters table and vice versa. Using COUNT to quantify the number of characters under each intelligence rating and finally aggregate functions to calculate the most intelligent character, the average intelligence of characters and the least intelligent character.
+
+
+
