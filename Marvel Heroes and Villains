@@ -52,7 +52,8 @@ INSERT INTO marvels VALUES(26, "Professor X", 58, "Good", "Male", 1.83, 86, "EUA
 SELECT ROUND(AVG(intelligence) , 2) as avg_intelligence, alignment FROM marvels
 GROUP BY alignment;
 
--- Here we can notice that, at least in the marvel universe, Bad aligned characters are more intelligent, and infact, good characters average as the least intelligent. --
+-- Here we can notice that, at least in the marvel universe, Bad aligned characters are more intelligent, and infact, 
+good characters average as the least intelligent.
 
 /* Who is the most intelligent character from each alignment? */
 
@@ -72,11 +73,17 @@ SELECT name, MAX(intelligence) as Highest_intelligence, alignment FROM marvels;
 
 SELECT name, MIN(intelligence) as Highest_intelligence, alignment FROM marvels;
 
--- Despite the average showing Bad aligned characters as being the most intelligent on average, we can see that infact, Rogue who is of good alignment, is the smartest character in the Marvel universe, suggesting that perhaps, Good/neutral characters have a larger distribution of intelligence generally, or a more concentrated distribution at the lower end than evil who may be more concentrated at the higher end. Lets investigate this between Good and Evil. First, I will find the average intelligence across all characters to inform how I will label each intelligence rating.
+-- Despite showing Bad aligned characters as being the most intelligent on average, we can see that infact, 
+Rogue who is of good alignment, is the smartest character in the Marvel universe, suggesting that perhaps, 
+Good/neutral characters have a larger distribution of intelligence generally, or a more concentrated distribution at the lower end 
+than bad who may be more concentrated at the higher end. Lets investigate this between Good and Bad. First, I will find the average intelligence 
+across all characters to inform how I will label each intelligence rating.
 
 SELECT ROUND(AVG(intelligence), 1) as avg_intelligence from marvels;
 
--- From this, we can see that 3.6 is the average. 3.6-5 will be Intelligent, 5+ Very Intelligent. Conversely, 2-3.6 will be Low Intelligence, 0-2 Very Low Intelligence. Lets put this into a CASE so we can see the count of each intelligence rating. Lets start with seeing the distribution of Good character intelligence.
+-- From this, we can see that 3.6 is the average. 3.6-5 will be Intelligent, 5+ Very Intelligent. 
+Conversely, 2-3.6 will be Low Intelligence, 0-2 Very Low Intelligence. 
+Lets put this into a CASE so we can see the count of each intelligence rating. Lets start with seeing the distribution of Good character intelligence.
 
 SELECT COUNT(*) as Quantity,
         CASE 
@@ -89,7 +96,7 @@ FROM marvels
 WHERE intelligence_rating_good IS NOT NULL
 GROUP BY intelligence_rating_Good;
 
--- Now lets do the same but with Evil characters instead.
+-- Now lets do the same but with Bad characters instead.
 
 SELECT COUNT(*) as Quantity,
         CASE 
@@ -107,22 +114,25 @@ GROUP BY intelligence_rating_Bad;
 SELECT name, alignment from marvels
 GROUP BY name
 HAVING intelligence >3.6 AND (alignment = "Good" or alignment = "Bad")
-ORDER BY alignment;
+ORDER BY alignment desc;
 
 -- In this database, how many characters are good, and how many are bad? 
 
-SELECT COUNT(*) as "Total_Bad_Characters"
+SELECT COUNT(*) as "Total_Characters", alignment
 FROM marvels
-WHERE alignment="Bad";
+where alignment = "Good" or alignment = "Bad"
+GROUP BY alignment;
 
-SELECT COUNT(*) as "Total_Good_Characters"
-FROM marvels
-WHERE alignment="Good";
+-- When comparing the two results, we can clearly see that, at least with the database that we are working with, 
+there are more Good characters leaning to the lower intelligence range, than the Bad characters, 
+explaining the higher average intelligence of Bad characters. Though as a limitation of this data, we can see we only have 4 examples of Bad characters, 
+compared to 15 examples of Good characters, which could skew the data.
 
-
--- When comparing the two results, we can clearly see that, at least with the database that we are working with, there are more Good characters leaning to the lower intelligence range, than the Bad characters, explaining the higher average intelligence of Bad characters. Though as a limitation of this data, we can see we only have 4 examples of Bad characters, compared to 15 examples of Good characters, which could skew the data.
-
--- During this investigation, I have used CASE, "IS NOT NULL", COUNT, ROUND, AND/OR functions and aggregate functions to visualize the intelligence of Marvel characters. Using CASE combined with AND/OR to sort the characters into intelligence ratings, using "IS NOT NULL" to exclude the Bad characters from the Good characters table and vice versa. Using COUNT to quantify the number of characters under each intelligence rating and finally aggregate functions to calculate the most intelligent character, the average intelligence of characters and the least intelligent character.
-
-
-
+-- During this investigation, I have used CASE, "IS NOT NULL", COUNT, ROUND, AND/OR functions, ORDER BY, asc/desc, HAVING and aggregate functions 
+to visualize the intelligence of Marvel characters. Using CASE combined with AND to sort the characters into intelligence ratings, 
+using "IS NOT NULL" to exclude the Bad characters from the Good characters table and vice versa. 
+Using COUNT to quantify the number of characters under each intelligence rating. 
+Used COUNT and OR to quantify how many characters of each alignment there are in the database. 
+Used HAVING and AND/OR functions to quantify how many characters score above average intelligence in Good/Bad alignment and 
+used aggregate functions to calculate the most intelligent character, the average intelligence of characters and the least intelligent character. 
+Last but not least, I used asc/desc functions on ORDER BY commands in order to list results in the order that I want them.
