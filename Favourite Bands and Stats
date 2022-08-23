@@ -1,0 +1,79 @@
+/* First I will create a table of my favourite bands */
+
+CREATE TABLE favourite_bands (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, country TEXT, year_founded INTEGER);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("The Beatles", "UK", 1960);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Led Zeppelin", "UK", 1968);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Queen", "UK", 1970);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("AC/DC", "AU", 1973);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Guns N' Roses", "USA", 1985);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Black Sabbath", "UK", 1968);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Lynyrd Skynyrd", "USA", 1964);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Aerosmith", "USA", 1970);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Nirvana", "USA", 1987);
+INSERT INTO favourite_bands (name, country, year_founded) VALUES ("Red Hot Chilli Peppers", "USA", 1983);
+SELECT * FROM favourite_bands;
+
+/* Now I will create a 2nd small table of some of the number one hits from my favourite bands, if any. (Billboard Top 100) */
+
+CREATE TABLE number_one_hits (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist_id INTEGER, release_year INTEGER);
+INSERT INTO number_one_hits (title, artist_id, release_year) VALUES ("Hey Jude", 1, 1968);
+INSERT INTO number_one_hits (title, artist_id, release_year) VALUES ("Come Together", 1, 1969);
+INSERT INTO number_one_hits (title, artist_id, release_year) VALUES ("Another One Bites The Dust", 3, 1980);
+INSERT INTO number_one_hits (title, artist_id, release_year) VALUES ("Crazy Little Thing Called Love", 3, 1979);
+INSERT INTO number_one_hits (title, artist_id, release_year) VALUES ("Sweet Child O' Mine", 5, 1988);
+INSERT INTO number_one_hits (title, artist_id, release_year) VALUES ("I Don't Want to Miss a Thing", 8, 1998);
+
+/* I only use the name of the song and the artist ID in this table as, despite looking less visually easy to read for humans, 
+keeping all the information of the artists etc in one table makes it far easier to adapt any errors. 
+As I have it now, should I spell The Beatles incorrectly as The beetles for example, its easy for me to go back to the first table, 
+correct the spelling error, and all subsequent tables will still be correct, rather than needing to adapt every table because i've written the Band name in twice. 
+This is exceedingly important in larger databases where you could be working with 1000s of rows. */
+
+/* Now I will create a 3rd table to use for a join later on. I will create a small table of some European countries our bands might be from. */
+
+CREATE TABLE european_countries (id INTEGER PRIMARY KEY AUTOINCREMENT, country_name TEXT, abbreviation TEXT);
+INSERT INTO european_countries (country_name, abbreviation) VALUES ("United Kingdom", "UK");
+INSERT INTO european_countries (country_name, abbreviation) VALUES ("France", "FR");
+INSERT INTO european_countries (country_name, abbreviation) VALUES ("Spain", "ESP");
+INSERT INTO european_countries (country_name, abbreviation) VALUES ("Germany", "DE");
+INSERT INTO european_countries (country_name, abbreviation) VALUES ("Denmark", "DK");
+INSERT INTO european_countries (country_name, abbreviation) VALUES ("Norway", "NO");
+
+/* Which of my favourite bands were able to make it to the Number one spot on the billboard Top 100, and with which songs? */
+
+SELECT B.name as Favourite_Band, N1.title as Number_One_Hits
+FROM favourite_bands b
+JOIN number_one_hits N1
+ON N1.artist_id = b.id;
+
+/* Which of my favourite bands come from Europe and which don't? */
+
+SELECT b.name, b.country, EU.abbreviation as EU_country
+FROM favourite_bands b
+LEFT OUTER JOIN european_countries EU
+ON b.country = EU_country
+ORDER BY EU_country desc;
+
+/* We can see that the European bands provide an EU_Country value, and the bands from other nations provide a null value. 
+If I was to use an inner join, I would not be able to see the bands that aren't from europe, in this case, I still wanted to see them all, 
+so I used a left outer join instead which obtains all the information from table one, (the bands in this case) and finds relative data from table two, 
+which is the European countries table, the relative data being the country abbrevation, so the beatles is from "UK", 
+the country abbreviation of the United Kingdom is "UK". */
+
+/* I'm also going to do one final table and join, to translate each Country from its abbreviated form to its full name, 
+for example, we have AC/DC as from AU, but I may not know that AU is short for Australia. 
+It is useful for me to have a table of all of the country abbreviations. 
+Furthermore, to potentially simplify a real table, we could certainly include the continent the country is on, 
+so that way we would no longer need a European_Countries table, and just adapt the above command to pull information from the Countries table below instead. 
+In this example though, I will not.  */
+
+CREATE TABLE Countries (id INTEGER PRIMARY KEY AUTOINCREMENT, Country_Full_Name TEXT, Country_Abbreviation TEXT);
+INSERT INTO countries (Country_Full_Name, Country_Abbreviation) VALUES ("United Kingdom", "UK");
+INSERT INTO countries (Country_Full_Name, Country_Abbreviation) VALUES ("United States of America", "USA");
+INSERT INTO countries (Country_Full_Name, Country_Abbreviation) VALUES ("Australia", "AU");
+
+Select b.name, c.country_full_name as country
+FROM favourite_bands b
+JOIN countries c
+ON c.country_abbreviation = b.country
+ORDER by country;
